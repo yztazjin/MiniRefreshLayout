@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ttyy.com.minirefreshlayout.demo.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_refresh"
+            android:layout_width="88dp"
+            android:layout_height="56dp"
+            android:background="#efefef"
+            android:text="Refresh"
+            android:textSize="18sp"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:onClick="onClick"/>
+
+
+        <TextView
+            android:id="@+id/tv_load"
+            android:layout_width="88dp"
+            android:layout_height="56dp"
+            android:background="#efefef"
+            android:text="Load"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:onClick="onClick"/>
+
+        <TextView
+            android:id="@+id/tv_stop"
+            android:layout_width="88dp"
+            android:layout_height="56dp"
+            android:background="#efefef"
+            android:text="Stop"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:onClick="onClick"/>
+
+    </LinearLayout>
+
+    <ttyy.com.minirefreshlayout.MiniRefreshLayout
+        android:id="@+id/mini_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="#ff0" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="#0ff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="#fff" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="#fab" />
+
+            </LinearLayout>
+        </ScrollView>
+    </ttyy.com.minirefreshlayout.MiniRefreshLayout>
+</LinearLayout>
