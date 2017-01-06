@@ -47,7 +47,7 @@ public class MiniAnimProcessor {
                 if (state == PullState.PULL_DOWN_REFRESH) {
 
                     IStateView mRefreshView = mContentProvider.getRefreshView();
-                    float percent = value / mStdHeightForPullDown;
+                    float percent = Math.abs(value) / mStdHeightForPullDown;
                     if(mRefreshView != null){
                         mRefreshView.onPullRelease(value, percent, mContentProvider);
                     }
@@ -58,7 +58,7 @@ public class MiniAnimProcessor {
                 } else if (state == PullState.PULL_UP_LOAD) {
 
                     IStateView mLoadMoreView = mContentProvider.getLoadMoreView();
-                    float percent = value / mStdHeightForPullUp;
+                    float percent = Math.abs(value) / mStdHeightForPullUp;
                     if(mLoadMoreView != null){
                         mLoadMoreView.onPullRelease(value, percent, mContentProvider);
                     }
