@@ -145,8 +145,14 @@ public class MiniPullEventProcessor {
                 float dy = ev.getY() - mTouchY;
                 if (state == PullState.PULL_DOWN_REFRESH) {
                     // 下拉刷新
-                    dy = Math.min(mMaxHeightForPullDown, dy);
                     dy = Math.max(0, dy);
+                    // 基点坐标矫正
+                    if(dy > mMaxHeightForPullDown){
+                        mTouchY += Math.abs(dy) - mMaxHeightForPullDown;
+                    }else if(dy == 0){
+                        mTouchY = ev.getY();
+                    }
+                    dy = Math.min(mMaxHeightForPullDown, dy);
 
                     IStateView mRefreshView = mContentProvider.getRefreshView();
                     PullListener mPullListener = mContentProvider.getPullListener();
@@ -163,8 +169,14 @@ public class MiniPullEventProcessor {
 
                 } else if (state == PullState.PULL_UP_LOAD) {
                     // 上拉加载
+                    dy = Math.min(0, dy);
+                    // 基点坐标矫正
+                    if(Math.abs(dy) > mMaxHeightForPullUp){
+                        mTouchY -= Math.abs(dy) - mMaxHeightForPullUp;
+                    }else if(dy == 0){
+                        mTouchY = ev.getY();
+                    }
                     dy = Math.min(mMaxHeightForPullUp, Math.abs(dy));
-                    dy = Math.max(0, dy);
 
                     IStateView mLoadMoreView = mContentProvider.getLoadMoreView();
                     PullListener mPullListener = mContentProvider.getPullListener();
