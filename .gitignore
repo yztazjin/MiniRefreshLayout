@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+bintrary.gradle
+gradle.properties
