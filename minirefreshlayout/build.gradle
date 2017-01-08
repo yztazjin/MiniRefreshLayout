@@ -8,7 +8,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -22,4 +22,4 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.2.1'
 }
-apply from:'../bintray.gradle'
+//apply from: 'https://raw.githubusercontent.com/venshine/gradle-bintray-upload/master/bintray.gradle'
