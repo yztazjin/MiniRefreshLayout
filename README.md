@@ -111,3 +111,6 @@ public interface IStateView {
 
 * WaveRefreshView
 > 顶部刷新， 波浪样式
+
+### 引用
+> compile 'com.ttyy.support:minirefreshlayout:1.0.1'
