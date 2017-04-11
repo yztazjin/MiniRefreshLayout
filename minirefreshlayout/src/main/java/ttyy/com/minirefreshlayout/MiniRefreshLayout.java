@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Scroller;
 
 import ttyy.com.minirefreshlayout.exts.SinaLoadMoreView;
 import ttyy.com.minirefreshlayout.exts.SinaRefreshView;
@@ -36,6 +37,8 @@ public class MiniRefreshLayout extends FrameLayout{
 
     private PullListener mPullListener;
 
+    private Scroller mScroller;
+
     public MiniRefreshLayout(Context context) {
         this(context, null);
     }
@@ -50,7 +53,35 @@ public class MiniRefreshLayout extends FrameLayout{
     }
 
     protected void init(AttributeSet attrs){
+        mScroller = new Scroller(getContext());
         mRefreshCore = MiniRefreshCore.from(provider);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if(mRefreshView.getFillZLayerMode() == IStateView.ZLayerMode.Same){
+            mRefreshLayout.layout(0,
+                    -provider.getStdHeightForPullDown(),
+                    getMeasuredWidth(),
+                    0);
+        }
+
+        if(mLoadMoreView.getFillZLayerMode() == IStateView.ZLayerMode.Same){
+            mLoadMoreLayout.layout(0,
+                    getMeasuredHeight(),
+                    getMeasuredWidth(),
+                    getMeasuredHeight() + provider.getStdHeightForPullUp());
+        }
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(mScroller.computeScrollOffset()){
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            postInvalidate();
+        }
     }
 
     @Override
@@ -105,7 +136,10 @@ public class MiniRefreshLayout extends FrameLayout{
             params.gravity = Gravity.TOP;
             if(mRefreshView.getFillZLayerMode() == IStateView.ZLayerMode.Top){
                 addView(mRefreshLayout, params);
-            }else {
+            }else if(mRefreshView.getFillZLayerMode() == IStateView.ZLayerMode.Same){
+                params.height = provider.getStdHeightForPullDown();
+                addView(mRefreshLayout, 0, params);
+            }else{
                 addView(mRefreshLayout, 0, params);
             }
 
@@ -134,7 +168,10 @@ public class MiniRefreshLayout extends FrameLayout{
             params.gravity = Gravity.BOTTOM;
             if(mLoadMoreView.getFillZLayerMode() == IStateView.ZLayerMode.Top){
                 addView(mLoadMoreLayout, params);
-            }else {
+            }else if(mLoadMoreView.getFillZLayerMode() == IStateView.ZLayerMode.Same){
+                params.height = provider.getStdHeightForPullUp();
+                addView(mLoadMoreLayout, 0, params);
+            }else{
                 addView(mLoadMoreLayout, 0, params);
             }
 
@@ -279,6 +316,14 @@ public class MiniRefreshLayout extends FrameLayout{
 
         public Context getContext(){
             return MiniRefreshLayout.this.getContext();
+        }
+
+        public Scroller getScroller(){
+            return MiniRefreshLayout.this.mScroller;
+        }
+
+        public MiniRefreshLayout getMiniRefreshLayoutParent(){
+            return MiniRefreshLayout.this;
         }
     }
 }
