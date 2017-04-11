@@ -2,7 +2,9 @@ package ttyy.com.minirefreshlayout.exts;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -84,44 +86,67 @@ public class SinaLoadMoreView extends FrameLayout implements IStateView {
 
     @Override
     public ZLayerMode getFillZLayerMode() {
+        if(Build.VERSION.SDK_INT == 17){
+            return ZLayerMode.Same;
+        }
+
         return ZLayerMode.Top;
     }
 
     @Override
     public void onPullOffsetYChanged(float offsetY, float percent, MiniRefreshLayout.ContentProvider mProvider) {
-        View mRefreshableView = mProvider.getRefreshableView();
-        mRefreshableView.setTranslationY(offsetY);
+        if(getFillZLayerMode() == ZLayerMode.Same){
+            if(percent < 1){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }
 
-        LayoutParams params = (LayoutParams) mProvider.getLoadMoreLayout().getLayoutParams();
-        params.height = (int) -offsetY;
-        mProvider.getLoadMoreLayout().requestLayout();
+            percent = percent < 1 ? percent : 1;
+        }else {
+            View mRefreshableView = mProvider.getRefreshableView();
+            mRefreshableView.setTranslationY(offsetY);
+
+            LayoutParams params = (LayoutParams) mProvider.getLoadMoreLayout().getLayoutParams();
+            params.height = (int) -offsetY;
+            mProvider.getLoadMoreLayout().requestLayout();
+
+            int mMaxLoadHeight = mProvider.getMaxHeightForPullUp();
+            int mStdLoadHeight = mProvider.getStdHeightForPullDown();
+            percent = percent * mStdLoadHeight / mMaxLoadHeight;
+        }
 
         refreshTextView.setText(pullUpStr);
         if(percent > 1){
             refreshTextView.setText(releaseRefreshStr);
         }
 
-        int mMaxLoadHeight = mProvider.getMaxHeightForPullUp();
-        int mStdLoadHeight = mProvider.getStdHeightForPullDown();
-        percent = percent * mStdLoadHeight / mMaxLoadHeight;
         refreshArrow.setRotation((1 - percent) * 180);
     }
 
     @Override
     public void onPullRelease(float offsetY, float percent, MiniRefreshLayout.ContentProvider mProvider) {
-        View mRefreshableView = mProvider.getRefreshableView();
-        mRefreshableView.setTranslationY(offsetY);
+        if(getFillZLayerMode() == ZLayerMode.Same){
+            if(percent < 1){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }
 
-        LayoutParams params = (LayoutParams) mProvider.getLoadMoreLayout().getLayoutParams();
-        params.height = (int) -offsetY;
-        mProvider.getLoadMoreLayout().requestLayout();
+            percent = percent < 1 ? percent : 1;
 
-        if(!mProvider.isLoading()){
-            refreshTextView.setText(pullUpStr);
+        }else {
+            View mRefreshableView = mProvider.getRefreshableView();
+            mRefreshableView.setTranslationY(offsetY);
+
+            LayoutParams params = (LayoutParams) mProvider.getLoadMoreLayout().getLayoutParams();
+            params.height = (int) -offsetY;
+            mProvider.getLoadMoreLayout().requestLayout();
 
             int mMaxLoadHeight = mProvider.getMaxHeightForPullUp();
             int mStdLoadHeight = mProvider.getStdHeightForPullDown();
             percent = percent * mStdLoadHeight / mMaxLoadHeight;
+        }
+
+        if(!mProvider.isLoading()){
+            refreshTextView.setText(pullUpStr);
+
             refreshArrow.setRotation((1 - percent) * 180);
             if(!mProvider.isLoading()){
                 AnimationDrawable ad = (AnimationDrawable) loadingView.getDrawable();
