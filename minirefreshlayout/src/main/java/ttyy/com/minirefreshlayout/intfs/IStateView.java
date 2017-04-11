@@ -50,6 +50,7 @@ public interface IStateView {
 
     enum ZLayerMode{
         Top,
-        Bottom;
+        Bottom,
+        Same;
     }
 }
