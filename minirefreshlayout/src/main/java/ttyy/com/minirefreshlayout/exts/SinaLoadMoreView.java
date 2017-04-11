@@ -98,6 +98,8 @@ public class SinaLoadMoreView extends FrameLayout implements IStateView {
         if(getFillZLayerMode() == ZLayerMode.Same){
             if(percent < 1){
                 mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }else if(Math.abs(mProvider.getMiniRefreshLayoutParent().getScrollY()) != mProvider.getStdHeightForPullUp()){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, mProvider.getStdHeightForPullUp());
             }
 
             percent = percent < 1 ? percent : 1;
@@ -127,6 +129,8 @@ public class SinaLoadMoreView extends FrameLayout implements IStateView {
         if(getFillZLayerMode() == ZLayerMode.Same){
             if(percent < 1){
                 mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }else if(Math.abs(mProvider.getMiniRefreshLayoutParent().getScrollY()) != mProvider.getStdHeightForPullUp()){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, mProvider.getStdHeightForPullUp());
             }
 
             percent = percent < 1 ? percent : 1;
