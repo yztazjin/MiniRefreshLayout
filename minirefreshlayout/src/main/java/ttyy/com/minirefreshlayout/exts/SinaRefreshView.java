@@ -67,6 +67,8 @@ public class SinaRefreshView extends FrameLayout implements IStateView {
         if(getFillZLayerMode() == ZLayerMode.Same){
             if(percent < 1){
                 mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }else if(Math.abs(mProvider.getMiniRefreshLayoutParent().getScrollY()) != mProvider.getStdHeightForPullDown()){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, -mProvider.getStdHeightForPullDown());
             }
 
             percent = percent < 1 ? percent : 1;
@@ -96,6 +98,8 @@ public class SinaRefreshView extends FrameLayout implements IStateView {
         if(getFillZLayerMode() == ZLayerMode.Same){
             if(percent < 1){
                 mProvider.getMiniRefreshLayoutParent().scrollTo(0, -(int) offsetY);
+            }else if(Math.abs(mProvider.getMiniRefreshLayoutParent().getScrollY()) != mProvider.getStdHeightForPullDown()){
+                mProvider.getMiniRefreshLayoutParent().scrollTo(0, -mProvider.getStdHeightForPullDown());
             }
 
             percent = percent < 1 ? percent : 1;
