@@ -309,6 +309,10 @@ public class MiniRefreshLayout extends FrameLayout{
         public boolean isLoading(){
             return mRefreshCore.isLoading;
         }
+        
+        public boolean isAnimating(){
+            return mAnimProcessor.isAnimating;
+        }
 
         public PullState getCurrPullState(){
             return mRefreshCore.mCurrState;
