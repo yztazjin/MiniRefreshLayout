@@ -91,7 +91,18 @@ public class MiniPullEventProcessor {
      * @return
      */
     protected boolean onInterceptTouchEvent(MotionEvent ev) {
+        
         View mChildView = mContentProvider.getRefreshableView();
+        
+         if (mChildView == null
+                || mContentProvider.isRefreshing()
+                || mContentProvider.isLoading()
+                || mContentProvider.isAnimating()) {
+             // 控制避免同时可以上拉/下拉刷新
+             // 同时空间事件流到GestureDectector手势处理器
+            return false;
+        }
+        
         if (mChildView != null) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -129,10 +140,12 @@ public class MiniPullEventProcessor {
      */
     protected boolean onTouchEvent(MotionEvent ev) {
         View mChildView = mContentProvider.getRefreshableView();
-        if (mChildView == null
-                        || mContentProvider.isRefreshing() ||
-                        mContentProvider.isLoading()) {
-            // 控制避免同时可以上拉/下拉刷新
+        
+         if (mChildView == null
+                || mContentProvider.isRefreshing()
+                || mContentProvider.isLoading()
+                || mContentProvider.isAnimating()) {
+               // 控制避免同时可以上拉/下拉刷新
             return false;
         }
 
