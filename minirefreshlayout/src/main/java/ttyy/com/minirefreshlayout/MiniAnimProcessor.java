@@ -21,7 +21,8 @@ public class MiniAnimProcessor {
     protected MiniRefreshLayout.ContentProvider mContentProvider;
     protected int mStdHeightForPullDown;
     protected int mStdHeightForPullUp;
-
+    protected boolean isAnimating = false;
+    
     final void setContentProvider(MiniRefreshLayout.ContentProvider mContentProvider){
         this.mContentProvider = mContentProvider;
         mStdHeightForPullDown = mContentProvider.getStdHeightForPullDown();
@@ -36,6 +37,19 @@ public class MiniAnimProcessor {
         ValueAnimator va = ValueAnimator.ofFloat(start, end);
         va.setDuration(duration);
         va.setInterpolator(new DecelerateInterpolator());
+        va.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                isAnimating = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                isAnimating = false;
+            }
+        });
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
